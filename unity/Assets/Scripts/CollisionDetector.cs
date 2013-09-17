@@ -15,6 +15,9 @@ public class CollisionDetector : MonoBehaviour {
 	}
 
     static public Vector2 MinTranslation(Shape lhs, Shape rhs) {
+        lhs.UpdateShape();
+        rhs.UpdateShape();
+
         if (!Intersects(lhs.AABB(), rhs.AABB())) {
             return Vector2.zero;
         }
@@ -31,13 +34,10 @@ public class CollisionDetector : MonoBehaviour {
             Vector2 r = rhs.Project(axis);
             float overlap = Overlap(l, r);
             if (overlap > 0 && overlap < minOverlap) {
-                Debug.Log("axis: " + axis + " lhs: " + l + " rhs: " + r + " overlap: " + overlap);
                 translation = axis * overlap;
                 minOverlap = overlap;
             }
         }
-
-        Debug.Log(translation);
         return translation;
     }
 

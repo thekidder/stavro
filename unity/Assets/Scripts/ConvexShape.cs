@@ -25,12 +25,6 @@ public class ConvexShape : MonoBehaviour, Shape {
 	
 	// Update is called once per frame
 	void Update () {
-        if (transform.position != lastPosition || transform.rotation != lastRotation) {
-            lastPosition = transform.position;
-            lastRotation = transform.rotation;
-            CalculateAABB();
-            CalculateAxes();
-        }
 	}
 
     void OnDrawGizmos() {
@@ -46,6 +40,15 @@ public class ConvexShape : MonoBehaviour, Shape {
         start = new Vector3(points[0].x, points[0].y, 0f);
         end = new Vector3(points[points.Count - 1].x, points[points.Count - 1].y, 0f);
         Gizmos.DrawLine(transform.TransformPoint(start), transform.TransformPoint(end));
+    }
+
+    public void UpdateShape() {
+        if (transform.position != lastPosition || transform.rotation != lastRotation) {
+            lastPosition = transform.position;
+            lastRotation = transform.rotation;
+            CalculateAABB();
+            CalculateAxes();
+        }
     }
 
     public Rect AABB() {
@@ -99,9 +102,12 @@ public class ConvexShape : MonoBehaviour, Shape {
 
     private void CalculateAxes() {
         axes.Clear();
+        Vector2 axis;
         for (int i = 1; i < points.Count; ++i) {
-            axes.Add((transform.TransformPoint(points[i]) - transform.TransformPoint(points[i - 1])).normalized);
+            axis = transform.TransformPoint(points[i]) - transform.TransformPoint(points[i - 1]);
+            axes.Add(axis.normalized);
         }
-        axes.Add((transform.TransformPoint(points[points.Count - 1]) - transform.TransformPoint(points[0])).normalized);
+        axis = transform.TransformPoint(points[points.Count - 1]) - transform.TransformPoint(points[0]);
+        axes.Add(axis.normalized);
     }
 }
