@@ -72,25 +72,24 @@ public class ConvexShape : MonoBehaviour, Shape {
     }
 
     private void CalculateAABB() {
-        Vector3 min = new Vector3(float.MaxValue, float.MaxValue, 0f);
-        Vector3 max = new Vector3(float.MinValue, float.MinValue, 0f);
+        Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
+        Vector2 max = new Vector2(float.MinValue, float.MinValue);
 
         foreach (Vector2 point in points) {
-            if (point.x < min.x) {
-                min.x = point.x;
-            } else if (point.x > max.x) {
-                max.x = point.x;
+            Vector2 worldPoint = transform.TransformPoint(point);
+
+            if (worldPoint.x < min.x) {
+                min.x = worldPoint.x;
+            } else if (worldPoint.x > max.x) {
+                max.x = worldPoint.x;
             }
 
-            if (point.y < min.y) {
-                min.y = point.y;
-            } else if (point.y > max.y) {
-                max.y = point.y;
+            if (worldPoint.y < min.y) {
+                min.y = worldPoint.y;
+            } else if (worldPoint.y > max.y) {
+                max.y = worldPoint.y;
             }
         }
-
-        min = transform.TransformPoint(min);
-        max = transform.TransformPoint(max);
 
         aabb.xMin = min.x;
         aabb.yMin = min.y;
@@ -101,8 +100,8 @@ public class ConvexShape : MonoBehaviour, Shape {
     private void CalculateAxes() {
         axes.Clear();
         for (int i = 1; i < points.Count; ++i) {
-            axes.Add(transform.TransformPoint(points[i] - points[i - 1]).normalized);
+            axes.Add((transform.TransformPoint(points[i]) - transform.TransformPoint(points[i - 1])).normalized);
         }
-        axes.Add(transform.TransformPoint(points[points.Count - 1] - points[0]).normalized);
+        axes.Add((transform.TransformPoint(points[points.Count - 1]) - transform.TransformPoint(points[0])).normalized);
     }
 }

@@ -33,9 +33,6 @@ public class CollisionDetector : MonoBehaviour {
             if (overlap > 0 && overlap < minOverlap) {
                 Debug.Log("axis: " + axis + " lhs: " + l + " rhs: " + r + " overlap: " + overlap);
                 translation = axis * overlap;
-                if (r.x < l.x) {
-                    translation = -translation;
-                }
                 minOverlap = overlap;
             }
         }
