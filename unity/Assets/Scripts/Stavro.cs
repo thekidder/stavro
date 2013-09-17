@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class Stavro : MonoBehaviour {
-	
+    public GameObject land;
+
 	bool right = true;
 	
 	// Use this for initialization
@@ -40,5 +41,13 @@ public class Stavro : MonoBehaviour {
 		}
 		
 		this.transform.position += new Vector3(x, 0f, 0f) * Time.deltaTime * 120f;
+
+        this.transform.Translate(0f, -30f * Time.deltaTime, 0f);
+        Shape landShape = land.GetComponent<ConvexShape>();
+        Shape thisShape = this.GetComponent<ConvexShape>();
+        Vector2 collision = CollisionDetector.MinTranslation(thisShape, landShape);
+        if (collision != Vector2.zero) {
+            this.transform.Translate(collision.x, collision.y, 0f);
+        }
 	}
 }
