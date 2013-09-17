@@ -105,9 +105,9 @@ public class ConvexShape : MonoBehaviour, Shape {
         Vector2 axis;
         for (int i = 1; i < points.Count; ++i) {
             axis = transform.TransformPoint(points[i]) - transform.TransformPoint(points[i - 1]);
-            axes.Add(axis.normalized);
+            axes.Add(new Vector2(-axis.y, axis.x).normalized);
         }
         axis = transform.TransformPoint(points[points.Count - 1]) - transform.TransformPoint(points[0]);
-        axes.Add(axis.normalized);
+        axes.Add(new Vector2(-axis.y, axis.x).normalized);
     }
 }

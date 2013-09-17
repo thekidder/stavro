@@ -33,9 +33,15 @@ public class CollisionDetector : MonoBehaviour {
             Vector2 l = lhs.Project(axis);
             Vector2 r = rhs.Project(axis);
             float overlap = Overlap(l, r);
-            if (overlap > 0 && overlap < minOverlap) {
+            if (overlap <= 0) {
+                return Vector2.zero;
+            } else if (overlap < minOverlap) {
                 translation = axis * overlap;
                 minOverlap = overlap;
+
+                if (l.x < r.x) {
+                    translation = -translation;
+                }
             }
         }
         return translation;
